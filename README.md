@@ -11,10 +11,10 @@ export e=”my_email” ;
 conda create -f env.yml
 conda activate mat
 python3 entrez_download.py -e $e 
-for f in all_segment_*.fasta ; 
+for f in segment_*.fasta ; 
   do echo $f ; 
   #align the sequences.
-  python3 ViralMSA.py -s $f -r ref${f#all} -e $e -o temp ; 
+  python3 ViralMSA.py -s $f -r ref_${f} -e $e -o temp ; 
   mv temp/* . ; 
   rm -r temp ; 
   #split the resulting aligned fasta into chunks for processing
