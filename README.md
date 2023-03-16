@@ -12,7 +12,7 @@ The following simple bash script implements this pipeline.
 export e=”my_email” ; 
 export ref="reference_" ; 
 python3 split_segments.py $ref ;
-conda create -f env.yml ;
+conda env create -f env.yml ;
 conda activate mat ;
 python3 entrez_download.py -e $e ;
 for f in segment_*.fasta ; 
@@ -22,10 +22,10 @@ for f in segment_*.fasta ;
   mv temp/* . ; 
   rm -r temp ; 
   #split the resulting aligned fasta into chunks for processing
-  split -l 10000 -d –additional-suffix=.fasta.aln $f.aln ${f%.fasta}_ ;
-  #conver to vcf
+  split -l 10000 -d --additional-suffix=.fasta.aln $f.aln ${f%.fasta}_ ;
+  #convert to vcf
   for g in ${f%.fasta}_*.aln ;
-    do ./faToVcf $g ${g%fasta.aln}vcf ; 
+    do faToVcf $g ${g%fasta.aln}vcf ; 
   done ;
   #create the initial tree then consecutively place onto the tree
   usher-sampled -t seed.nwk -v ${f%.fasta}_00.vcf -o ${f%fasta}pb --optimization_radius 0;
