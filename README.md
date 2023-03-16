@@ -28,9 +28,9 @@ for f in segment_*.fasta ;
     do ./faToVcf $g ${g%fasta.aln}vcf ; 
   done ;
   #create the initial tree then consecutively place onto the tree
-  usher-sampled -t seed.nwk -v ${f%.fasta}_00.vcf -o ${f%fasta}pb ;
+  usher-sampled -t seed.nwk -v ${f%.fasta}_00.vcf -o ${f%fasta}pb --optimization_radius 0;
   for v in ${f%.fasta}*vcf ; 
-    do usher-sampled -i ${f%fasta}pb -v $v -o ${f%fasta}pb –optimization_radius 0;
+    do usher-sampled -i ${f%fasta}pb -v $v -o ${f%fasta}pb --optimization_radius 0;
   done ;
 done ;
 gzip *pb ;
