@@ -1,10 +1,11 @@
 from Bio import SeqIO
+import sys
 files = {}
-segnames = ['segment_' + str(i) for i in range(1,9)]
+segnames = ['ref_segment_' + str(i) for i in range(1,9)]
 for f in segnames:
     files[f] = open(f + ".fasta",'w+')
 other = open("unsorted.fasta","w+")
-for record in SeqIO.parse("fixname.fasta", "fasta"):
+for record in SeqIO.parse(sys.argv[1], "fasta"):
     try:
         search = record.description.find("segment")+8
         idx = record.description[search]

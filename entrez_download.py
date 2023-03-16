@@ -17,8 +17,8 @@ args = argparser()
 Entrez.email= args.email
 groupsize = args.groupsize
 metafields = ['strain'] + args.fields
-segment_files = [open('all_segment_'+str(i)+".fasta",'w+') for i in range(1,9)]
-other_file = open('all_other.fasta','w+')
+segment_files = [open('segment_'+str(i)+".fasta",'w+') for i in range(1,9)]
+other_file = open('other.fasta','w+')
 meta_file = open("metadata.tsv","w+")
 print("\t".join(metafields),file=meta_file)
 total = int(Entrez.read(Entrez.esearch(db='nuccore', retstart=0, retmax=1, term='Alphainfluenzavirus', retmode='xml'))['Count'])
