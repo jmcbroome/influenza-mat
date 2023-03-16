@@ -3,14 +3,18 @@ Code and information for constructing influenzavirus Mutation Annotated Trees (M
 
 Influenzavirus data is obtained from Entrez using `entrez_download.py`. This produces a series of segment-divided alphainfluenzavirus fasta. These are then aligned with [ViralMSA](https://github.com/niemasd/ViralMSA) wrapping [Minimap2](https://github.com/lh3/minimap2) and converted to VCF with [faToVcf](http://hgdownload.cse.ucsc.edu/admin/exe/). A MAT for each segment is then constructed with [UShER](https://github.com/yatisht/usher). 
 
+A reference genome can be obtained from [NCBI Virus](https://0-www-ncbi-nlm-nih-gov.brum.beds.ac.uk/labs/virus/vssi/#/virus?SeqType_s=Genome&VirusLineage_ss=Alphainfluenzavirus,%20taxid:197911). The data in this repository used [this reference](https://0-www-ncbi-nlm-nih-gov.brum.beds.ac.uk/assembly/GCF_001343785.1). The reference fasta is then split with `split_segments.py` to generate segment-level references for alignment.
+
 The following simple bash script implements this pipeline.
 
 ```
-#insert your email here.
+#insert your email and choice of reference here.
 export e=”my_email” ; 
-conda create -f env.yml
-conda activate mat
-python3 entrez_download.py -e $e 
+export ref="reference_" ; 
+python3 split_segments.py $ref ;
+conda create -f env.yml ;
+conda activate mat ;
+python3 entrez_download.py -e $e ;
 for f in segment_*.fasta ; 
   do echo $f ; 
   #align the sequences.
