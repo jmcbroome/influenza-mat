@@ -16,7 +16,7 @@ def argparser():
 args = argparser()
 Entrez.email= args.email
 groupsize = args.groupsize
-metafields = ['strain'] + args.fields
+metafields = ['accession','strain'] + args.fields
 segment_files = [open('segment_'+str(i)+".fasta",'w+') for i in range(1,9)]
 other_file = open('other.fasta','w+')
 meta_file = open("metadata.tsv","w+")
@@ -41,7 +41,7 @@ for i in range(0,total,groupsize):
             #build the description by qualifier.
             #we care about the host, the segment, the serotype, the isolation source, the country, and the date.
             keys = {k:"N/A" for k in metafields}
-            keys['strain'] = sname
+            keys['accession'] = sname
             for quals in data.find_all("GBQualifier"):
                 try:
                     name, value = list(quals.stripped_strings)
