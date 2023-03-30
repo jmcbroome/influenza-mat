@@ -9,11 +9,14 @@ def argparser():
     parser.add_argument('-g','--gzipped', action='store_true', help='Indicate that the target tree files are gzipped and end with .gz.')
     parser.add_argument('-o','--output', help="Name of the output MAT protobuf. Default is grafted.pb", default='grafted.pb')
     parser.add_argument('-s','--scale',type=float,help="Scale the branch lengths of the base tree by this value. Default 1",default=1)
+    parser.add_argument('-u','--dummy', action='store_true',help="Add dummy mutations to the base tree newick.")
     parser.add_argument('-d','--dump',help="Set to a file to write a two-column tab-delimited set of sample-subtree identifiers, for adding to metadata.",default=None)
     args = parser.parse_args()
     if not os.path.isfile(args.tree):
         parser.error(f"File '{args.tree}' does not exist.")
     # Check if the pb_folder exists and is a directory
+    if args.pb_folder[-1] == '/':
+        args.pb_folder = args.pb_folder[:-1]
     if not os.path.isdir(args.pb_folder):
         parser.error(f"'{args.pb_folder}' is not a valid directory.")
     # Get a list of all the .pb files in the pb_folder
@@ -33,7 +36,10 @@ def main():
     basetree = bte.MATree(nwk_file=args.tree)
     #scale the branch lengths.
     for n in basetree.depth_first_expansion():
-        n.set_branch_length(n.branch_length * args.scale)
+        length = n.branch_length * args.scale
+        n.set_branch_length(length)
+        if args.dummy:
+            n.update_mutations(['N' + str(i) + 'N' for i in range(int(length))])
     #proceed to add the data. 
     names_seen = set()
     for l in basetree.get_leaves():
